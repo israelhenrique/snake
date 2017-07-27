@@ -39,7 +39,7 @@ class Grid extends Component {
   renderGridRow(columns,rowNumber){
     const row = []
     for (let i = 0; i < columns; i++) {
-      row.push(Square({key: i+rowNumber*10, fill: this.state.grid[i+rowNumber*10]}))
+      row.push(Square({key: i+rowNumber*columns, fill: this.state.grid[i+rowNumber*columns]}))
     }
     return(
       <div key={rowNumber} className="grid-row">
