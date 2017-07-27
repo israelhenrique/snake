@@ -2,10 +2,26 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
+  constructor(){
+    super()
+    this.state = {
+      scenario: createScenario(10,10)
+    }
+    this.handleKeyDown = this.handleKeyDown.bind(this)
+  }
+  componentDidMount(){
+    this.element.focus();
+  }
+  handleKeyDown(e){
+    const scenario = movePoint(this.state.scenario.grid, this.state.scenario.headPosition, e.key)
+    this.setState({
+        scenario: scenario
+    })
+  }
   render() {
     return (
-      <div className="App">
-        <Grid rows='10' columns='10'/>
+      <div ref={(el) => { this.element = el; }} onKeyDown={this.handleKeyDown} tabIndex="0" className="App">
+        <Grid grid={this.state.scenario.grid}/>
       </div>
     )
   }
@@ -15,16 +31,18 @@ class Grid extends Component {
   constructor(props){
     super(props)
     this.state = {
-      grid:  createGrid(this.props.rows,this.props.columns)
+      grid:  this.props.grid
     }
+    this.gridRows = Math.sqrt(this.props.grid.length)
+    this.gridColumns = this.gridRows
   }
   renderGridRow(columns,rowNumber){
     const row = []
     for (let i = 0; i < columns; i++) {
-      row.push(Square({fill: this.state.grid[i+rowNumber*10]}))
+      row.push(Square({key: i+rowNumber*10, fill: this.state.grid[i+rowNumber*10]}))
     }
     return(
-      <div className="grid-row">
+      <div key={rowNumber} className="grid-row">
         {row}
       </div>
     )
@@ -38,8 +56,8 @@ class Grid extends Component {
   }
   render() {
     return (
-      <div className="grid">
-        {this.renderGrid(this.props.rows, this.props.columns)}
+      <div className="grid" >
+        {this.renderGrid(this.gridRows, this.gridColumns)}
       </div>
     )
   }
@@ -48,13 +66,41 @@ class Grid extends Component {
 function Square(props) {
     const style = props.fill ? {background: 'black'} : {background: 'white'}
     return (
-      <span className="square" style={style}>
+      <span key={props.key} className="square" style={style}>
       </span>
     )
 }
 
-const createGrid = (nrows, ncolumns) => (Array(nrows*ncolumns).fill(0))
+const createScenario = (nrows, ncolumns) => {
+  let grid = Array(nrows*ncolumns).fill(0)
+  grid[0] = 1
+  return {grid: grid, headPosition: 0}
+}
 
-
+const movePoint = (grid, index, direction) => {
+  let headPosition = ''
+  const lineLength = Math.sqrt(grid.length)
+  switch (direction) {
+    case 'ArrowUp':
+      headPosition = index-lineLength
+      grid[headPosition] = 1
+      break;
+    case 'ArrowDown':
+      headPosition = index+lineLength
+      grid[headPosition] = 1
+      break;
+    case 'ArrowLeft':
+      headPosition = index-1
+      grid[headPosition] = 1
+      break;
+    case 'ArrowRight':
+      headPosition = index+1
+      grid[headPosition] = 1
+      break;
+    default:
+  }
+  grid[index] = 0
+  return ({grid: grid, headPosition: headPosition});
+}
 
 export default App;
