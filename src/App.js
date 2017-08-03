@@ -30,16 +30,13 @@ class App extends Component {
 class Grid extends Component {
   constructor(props){
     super(props)
-    this.state = {
-      grid:  this.props.grid
-    }
     this.gridRows = Math.sqrt(this.props.grid.length)
     this.gridColumns = this.gridRows
   }
   renderGridRow(columns,rowNumber){
     const row = []
     for (let i = 0; i < columns; i++) {
-      row.push(Square({key: i+rowNumber*columns, fill: this.state.grid[i+rowNumber*columns]}))
+      row.push(Square({key: i+rowNumber*columns, fill: this.props.grid[i+rowNumber*columns]}))
     }
     return(
       <div key={rowNumber} className="grid-row">
