@@ -52,8 +52,10 @@ function Square(props) {
 
 const createScenario = (nrows, ncolumns) => {
   let grid = Array(nrows*ncolumns).fill(0)
+  const foodPosition = getRandomInt(0, ncolumns*nrows)
   grid[0] = 1
-  return {grid: grid, headPosition: 0}
+  grid[foodPosition] = 1
+  return {grid: grid, headPosition: 0, foodPosition: foodPosition}
 }
 
 const movePoint = (grid, index, direction) => {
@@ -90,6 +92,12 @@ const movePoint = (grid, index, direction) => {
   }
   grid[index] = 0
   return ({grid: grid, headPosition: headPosition});
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 export default App;
