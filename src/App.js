@@ -59,21 +59,31 @@ const createScenario = (nrows, ncolumns) => {
 const movePoint = (grid, index, direction) => {
   let headPosition = ''
   const lineLength = Math.sqrt(grid.length)
+  const currentLine = Math.floor(index/lineLength)
   switch (direction) {
     case 'ArrowUp':
       headPosition = index-lineLength
+      if(currentLine === 0)
+        headPosition = index+lineLength*(lineLength-1)
       grid[headPosition] = 1
       break;
     case 'ArrowDown':
       headPosition = index+lineLength
+      if(currentLine === lineLength-1)
+        headPosition = index-lineLength*(lineLength-1)
+      console.log(currentLine)
       grid[headPosition] = 1
       break;
     case 'ArrowLeft':
       headPosition = index-1
+      if (Math.floor(headPosition/lineLength) < currentLine)
+        headPosition = currentLine*lineLength+(lineLength-1)
       grid[headPosition] = 1
       break;
     case 'ArrowRight':
       headPosition = index+1
+      if (Math.floor(headPosition/lineLength) > currentLine)
+        headPosition = currentLine*lineLength
       grid[headPosition] = 1
       break;
     default:
