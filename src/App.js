@@ -27,37 +27,19 @@ class App extends Component {
   }
 }
 
-class Grid extends Component {
-  constructor(props){
-    super(props)
-    this.gridRows = Math.sqrt(this.props.grid.length)
-    this.gridColumns = this.gridRows
-  }
-  renderGridRow(columns,rowNumber){
-    const row = []
-    for (let i = 0; i < columns; i++) {
-      row.push(Square({key: i+rowNumber*columns, fill: this.props.grid[i+rowNumber*columns]}))
-    }
-    return(
-      <div key={rowNumber} className="grid-row">
-        {row}
-      </div>
-    )
-  }
-  renderGrid(nrows,ncolumns){
-    const rows = []
-    for (let i = 0; i < nrows; i++) {
-      rows.push(this.renderGridRow(ncolumns,i))
-    }
-    return rows
-  }
-  render() {
-    return (
-      <div className="grid" >
-        {this.renderGrid(this.gridRows, this.gridColumns)}
-      </div>
-    )
-  }
+function Grid(props){
+  return (
+    <div className="grid" >
+      {(props.grid || []).map((tile, index) => (
+        <span key={index}>
+          { (index % 10 === 0) && (
+            <span className="clearfix" />
+          )}
+          <Square className="square"  fill={tile} />
+        </span>
+      ))}
+    </div>
+  )
 }
 
 function Square(props) {

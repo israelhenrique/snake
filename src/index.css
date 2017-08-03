@@ -1,6 +1,7 @@
-.grid-row {
-   float: left;
-   width: 100%;
+.clearfix:after {
+content: '';
+display: block;
+clear: both;
 }
 .square {
   background: #fff;
