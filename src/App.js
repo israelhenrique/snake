@@ -13,7 +13,7 @@ class App extends Component {
     this.element.focus();
   }
   handleKeyDown(e){
-    const scenario = movePoint(this.state.scenario.grid, this.state.scenario.headPosition, e.key)
+    const scenario = movePoint(this.state.scenario, this.state.scenario.headPosition, e.key)
     this.setState({
         scenario: scenario
     })
@@ -58,8 +58,10 @@ const createScenario = (nrows, ncolumns) => {
   return {grid: grid, headPosition: 0, foodPosition: foodPosition}
 }
 
-const movePoint = (grid, index, direction) => {
+const movePoint = (scenario, index, direction) => {
   let headPosition = ''
+  let foodPosition = scenario.foodPosition
+  let grid = scenario.grid.slice();
   const lineLength = Math.sqrt(grid.length)
   const currentLine = Math.floor(index/lineLength)
   switch (direction) {
@@ -91,7 +93,12 @@ const movePoint = (grid, index, direction) => {
     default:
   }
   grid[index] = 0
-  return ({grid: grid, headPosition: headPosition});
+  if (headPosition === foodPosition){
+    foodPosition = getRandomInt(0, lineLength*lineLength)
+    grid[foodPosition] = 1
+  }
+  console.log(grid)
+  return ({grid: grid, headPosition: headPosition, foodPosition: foodPosition});
 }
 
 function getRandomInt(min, max) {
