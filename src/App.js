@@ -75,7 +75,6 @@ const movePoint = (scenario, index, direction) => {
       headPosition = index+lineLength
       if(currentLine === lineLength-1)
         headPosition = index-lineLength*(lineLength-1)
-      console.log(currentLine)
       grid[headPosition] = 1
       break;
     case 'ArrowLeft':
@@ -94,10 +93,11 @@ const movePoint = (scenario, index, direction) => {
   }
   grid[index] = 0
   if (headPosition === foodPosition){
-    foodPosition = getRandomInt(0, lineLength*lineLength)
+    do{
+      foodPosition = getRandomInt(0, lineLength*lineLength)
+    } while (foodPosition === headPosition)
     grid[foodPosition] = 1
   }
-  console.log(grid)
   return ({grid: grid, headPosition: headPosition, foodPosition: foodPosition});
 }
 
