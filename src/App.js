@@ -64,7 +64,7 @@ const createScenario = (nrows, ncolumns) => {
   let grid = Array(nrows*ncolumns).fill(0)
   const foodPosition = getRandomInt(0, ncolumns*nrows)
   grid[0] = 1
-  grid[foodPosition] = 1
+  grid[foodPosition] = 2
   return {grid: grid, headPosition: 0, foodPosition: foodPosition}
 }
 
@@ -106,7 +106,7 @@ const movePoint = (scenario, index, direction) => {
     do{
       foodPosition = getRandomInt(0, lineLength*lineLength)
     } while (foodPosition === headPosition)
-    grid[foodPosition] = 1
+    grid[foodPosition] = 2
   }
   return ({grid: grid, headPosition: headPosition, foodPosition: foodPosition});
 }
