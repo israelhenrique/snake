@@ -35,7 +35,7 @@ function Grid(props){
           { (index % 10 === 0) && (
             <span className="clearfix" />
           )}
-          <Square className="square"  fill={tile} />
+          <Square className="square"  color={tile} />
         </span>
       ))}
     </div>
@@ -43,7 +43,17 @@ function Grid(props){
 }
 
 function Square(props) {
-    const style = props.fill ? {background: 'black'} : {background: 'white'}
+    let style = {}
+    switch (props.color) {
+      case 1:
+        style = {background: 'gray'}
+        break;
+      case 2:
+        style = {background: 'darkgray'}
+        break;
+      default:
+        style = {background: 'white'}
+    }
     return (
       <span key={props.key} className="square" style={style}>
       </span>
