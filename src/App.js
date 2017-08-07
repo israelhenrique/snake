@@ -5,18 +5,51 @@ class App extends Component {
   constructor(){
     super()
     this.state = {
-      scenario: createScenario(10,10)
+      scenario: createScenario(10,10),
+      snakeDirection: 'up'
     }
     this.handleKeyDown = this.handleKeyDown.bind(this)
+    this.moveSnake = this.moveSnake.bind(this)
   }
   componentDidMount(){
     this.element.focus();
+    setInterval(this.moveSnake, 300)
   }
-  handleKeyDown(e){
-    const scenario = movePoint(this.state.scenario, this.state.scenario.headPosition, e.key)
+  moveSnake(){
+    const scenario = movePoint(this.state.scenario, this.state.scenario.headPosition, this.state.snakeDirection)
     this.setState({
         scenario: scenario
     })
+  }
+  handleKeyDown(e){
+    console.log(e)
+    switch (e.key) {
+      case 'ArrowUp':
+        if(this.state.snakeDirection !== 'down' )
+          this.setState({
+              snakeDirection: 'up'
+          })
+        break;
+      case 'ArrowDown':
+        if(this.state.snakeDirection !== 'up')
+          this.setState({
+              snakeDirection: 'down'
+          })
+        break;
+      case 'ArrowLeft':
+        if(this.state.snakeDirection !== 'right' )
+          this.setState({
+              snakeDirection: 'left'
+          })
+        break;
+      case 'ArrowRight':
+        if(this.state.snakeDirection !== 'left' )
+          this.setState({
+              snakeDirection: 'right'
+          })
+        break;
+      default:
+    }
   }
   render() {
     return (
@@ -75,25 +108,25 @@ const movePoint = (scenario, index, direction) => {
   const lineLength = Math.sqrt(grid.length)
   const currentLine = Math.floor(index/lineLength)
   switch (direction) {
-    case 'ArrowUp':
+    case 'up':
       headPosition = index-lineLength
       if(currentLine === 0)
         headPosition = index+lineLength*(lineLength-1)
       grid[headPosition] = 1
       break;
-    case 'ArrowDown':
+    case 'down':
       headPosition = index+lineLength
       if(currentLine === lineLength-1)
         headPosition = index-lineLength*(lineLength-1)
       grid[headPosition] = 1
       break;
-    case 'ArrowLeft':
+    case 'left':
       headPosition = index-1
       if (Math.floor(headPosition/lineLength) < currentLine)
         headPosition = currentLine*lineLength+(lineLength-1)
       grid[headPosition] = 1
       break;
-    case 'ArrowRight':
+    case 'right':
       headPosition = index+1
       if (Math.floor(headPosition/lineLength) > currentLine)
         headPosition = currentLine*lineLength
@@ -110,6 +143,8 @@ const movePoint = (scenario, index, direction) => {
   }
   return ({grid: grid, headPosition: headPosition, foodPosition: foodPosition});
 }
+
+
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
