@@ -6,8 +6,9 @@ class App extends Component {
     super()
     this.state = {
       scenario: createScenario(10,10),
-      snakeDirection: 'up'
     }
+    this.snakeDirection = 'up'
+    this.nextSnakeDirection = 'up'
     this.handleKeyDown = this.handleKeyDown.bind(this)
     this.moveSnake = this.moveSnake.bind(this)
   }
@@ -16,37 +17,29 @@ class App extends Component {
     setInterval(this.moveSnake, 300)
   }
   moveSnake(){
-    const scenario = movePoint(this.state.scenario, this.state.scenario.headPosition, this.state.snakeDirection)
+    this.snakeDirection = this.nextSnakeDirection;
+    const scenario = movePoint(this.state.scenario, this.state.scenario.headPosition, this.snakeDirection)
     this.setState({
         scenario: scenario
     })
   }
   handleKeyDown(e){
-    console.log(e)
     switch (e.key) {
       case 'ArrowUp':
-        if(this.state.snakeDirection !== 'down' )
-          this.setState({
-              snakeDirection: 'up'
-          })
+        if(this.snakeDirection !== 'down' )
+          this.nextSnakeDirection = 'up'
         break;
       case 'ArrowDown':
-        if(this.state.snakeDirection !== 'up')
-          this.setState({
-              snakeDirection: 'down'
-          })
+        if(this.snakeDirection !== 'up')
+          this.nextSnakeDirection = 'down'
         break;
       case 'ArrowLeft':
-        if(this.state.snakeDirection !== 'right' )
-          this.setState({
-              snakeDirection: 'left'
-          })
+        if(this.snakeDirection !== 'right' )
+          this.nextSnakeDirection = 'left'
         break;
       case 'ArrowRight':
-        if(this.state.snakeDirection !== 'left' )
-          this.setState({
-              snakeDirection: 'right'
-          })
+        if(this.snakeDirection !== 'left' )
+          this.nextSnakeDirection = 'right'
         break;
       default:
     }
@@ -143,7 +136,6 @@ const movePoint = (scenario, index, direction) => {
   }
   return ({grid: grid, headPosition: headPosition, foodPosition: foodPosition});
 }
-
 
 
 function getRandomInt(min, max) {
