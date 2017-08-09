@@ -8,16 +8,17 @@ class App extends Component {
       scenario: createScenario(10,10),
     }
     this.snakeDirection = 'up'
-    this.nextSnakeDirection = 'up'
+    this.commandList = ['up']
     this.handleKeyDown = this.handleKeyDown.bind(this)
     this.moveSnake = this.moveSnake.bind(this)
+  
   }
   componentDidMount(){
     this.element.focus();
     setInterval(this.moveSnake, 300)
   }
   moveSnake(){
-    this.snakeDirection = this.nextSnakeDirection;
+    this.snakeDirection = (this.commandList.shift() || this.snakeDirection);
     const scenario = movePoint(this.state.scenario, this.state.scenario.headPosition, this.snakeDirection)
     this.setState({
         scenario: scenario
@@ -26,20 +27,20 @@ class App extends Component {
   handleKeyDown(e){
     switch (e.key) {
       case 'ArrowUp':
-        if(this.snakeDirection !== 'down' )
-          this.nextSnakeDirection = 'up'
+        if (this.snakeDirection !== 'down')
+          this.commandList.push('up')
         break;
       case 'ArrowDown':
-        if(this.snakeDirection !== 'up')
-          this.nextSnakeDirection = 'down'
+        if (this.snakeDirection !== 'up')
+          this.commandList.push('down')
         break;
       case 'ArrowLeft':
-        if(this.snakeDirection !== 'right' )
-          this.nextSnakeDirection = 'left'
+        if (this.snakeDirection !== 'right')
+          this.commandList.push('left')
         break;
       case 'ArrowRight':
-        if(this.snakeDirection !== 'left' )
-          this.nextSnakeDirection = 'right'
+        if (this.snakeDirection !== 'left')
+          this.commandList.push('right')
         break;
       default:
     }
