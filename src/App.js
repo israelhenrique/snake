@@ -11,7 +11,7 @@ class App extends Component {
     this.commandList = ['up']
     this.handleKeyDown = this.handleKeyDown.bind(this)
     this.moveSnake = this.moveSnake.bind(this)
-  
+
   }
   componentDidMount(){
     this.element.focus();
@@ -19,7 +19,8 @@ class App extends Component {
   }
   moveSnake(){
     this.snakeDirection = (this.commandList.shift() || this.snakeDirection);
-    const scenario = movePoint(this.state.scenario, this.state.scenario.headPosition, this.snakeDirection)
+    //const scenario = movePoint(this.state.scenario, this.state.scenario.headPosition, this.snakeDirection)
+    const scenario = moveSnake(this.state.scenario, this.snakeDirection)
     this.setState({
         scenario: scenario
     })
@@ -87,57 +88,81 @@ function Square(props) {
     )
 }
 
+const plotSnake = (grid,snake) => {
+  for (var i = 0; i < snake.length; i++) {
+    grid[snake[i]] = 1
+  }
+  return grid
+}
+
 const createScenario = (nrows, ncolumns) => {
   let grid = Array(nrows*ncolumns).fill(0)
   const foodPosition = getRandomInt(0, ncolumns*nrows)
-  grid[0] = 1
+  const snake = [4,5,6]
+  //grid[0] = 1
   grid[foodPosition] = 2
-  return {grid: grid, headPosition: 0, foodPosition: foodPosition}
+  //grid = plotSnake(grid,snake)
+  return {grid: grid, headPosition: 0, snake: snake,foodPosition: foodPosition}
 }
 
-const movePoint = (scenario, index, direction) => {
+const moveSnake = (scenario, direction) => {
   let headPosition = ''
   let foodPosition = scenario.foodPosition
+  const snake = scenario.snake
   let grid = scenario.grid.slice();
   const lineLength = Math.sqrt(grid.length)
-  const currentLine = Math.floor(index/lineLength)
+  const currentLine = Math.floor(snake[0]/lineLength)
+  console.log(snake[0])
   switch (direction) {
     case 'up':
-      headPosition = index-lineLength
+      headPosition = snake[0]-lineLength
       if(currentLine === 0)
-        headPosition = index+lineLength*(lineLength-1)
-      grid[headPosition] = 1
+        headPosition = snake[0]+lineLength*(lineLength-1)
       break;
     case 'down':
-      headPosition = index+lineLength
+      headPosition = snake[0]+lineLength
       if(currentLine === lineLength-1)
-        headPosition = index-lineLength*(lineLength-1)
-      grid[headPosition] = 1
+        headPosition = snake[0]-lineLength*(lineLength-1)
       break;
     case 'left':
-      headPosition = index-1
+      headPosition = snake[0]-1
       if (Math.floor(headPosition/lineLength) < currentLine)
         headPosition = currentLine*lineLength+(lineLength-1)
-      grid[headPosition] = 1
       break;
     case 'right':
-      headPosition = index+1
+      headPosition = snake[0]+1
       if (Math.floor(headPosition/lineLength) > currentLine)
         headPosition = currentLine*lineLength
-      grid[headPosition] = 1
       break;
     default:
   }
-  grid[index] = 0
+  for (var i = 0; i < snake.length; i++) {
+    grid[snake[i]] = 0
+  }
+  const newSnake = newSnakePosition(snake,headPosition)
+  console.log(snake)
   if (headPosition === foodPosition){
     do{
       foodPosition = getRandomInt(0, lineLength*lineLength)
     } while (foodPosition === headPosition)
     grid[foodPosition] = 2
   }
-  return ({grid: grid, headPosition: headPosition, foodPosition: foodPosition});
+  const newGrid = plotSnake(grid,newSnake)
+  return ({grid: newGrid, headPosition: headPosition,snake: newSnake, foodPosition: foodPosition});
 }
 
+const newSnakePosition = (snake,nextHeadPosition) => {
+  const newSnake =  snake.map((pos,index, snake) => {
+    if (index === 0)
+      return nextHeadPosition
+    else {
+      return snake[index-1]
+    }
+  })
+
+  return newSnake
+
+}
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
