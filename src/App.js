@@ -112,7 +112,6 @@ const moveSnake = (scenario, direction) => {
   let grid = scenario.grid.slice();
   const lineLength = Math.sqrt(grid.length)
   const currentLine = Math.floor(snake[0]/lineLength)
-  console.log(snake[0])
   switch (direction) {
     case 'up':
       headPosition = snake[0]-lineLength
@@ -140,7 +139,6 @@ const moveSnake = (scenario, direction) => {
     grid[snake[i]] = 0
   }
   const newSnake = newSnakePosition(snake,headPosition)
-  console.log(snake)
   if (headPosition === foodPosition){
     do{
       foodPosition = getRandomInt(0, lineLength*lineLength)
@@ -163,6 +161,8 @@ const newSnakePosition = (snake,nextHeadPosition) => {
   return newSnake
 
 }
+
+
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
