@@ -28,19 +28,19 @@ class App extends Component {
   handleKeyDown(e){
     switch (e.key) {
       case 'ArrowUp':
-        if (this.snakeDirection !== 'down')
+        if (this.snakeDirection !== 'down' && this.commandList[this.commandList.length-1] !== 'down')
           this.commandList.push('up')
         break;
       case 'ArrowDown':
-        if (this.snakeDirection !== 'up')
+        if (this.snakeDirection !== 'up' && this.commandList[this.commandList.length-1] !== 'up')
           this.commandList.push('down')
         break;
       case 'ArrowLeft':
-        if (this.snakeDirection !== 'right')
+        if (this.snakeDirection !== 'right' && this.commandList[this.commandList.length-1] !== 'right')
           this.commandList.push('left')
         break;
       case 'ArrowRight':
-        if (this.snakeDirection !== 'left')
+        if (this.snakeDirection !== 'left' && this.commandList[this.commandList.length-1] !== 'left')
           this.commandList.push('right')
         break;
       default:
